@@ -2,6 +2,7 @@ package crypto
 
 import (
 	"bytes"
+	"crypto"
 	"io"
 	"io/ioutil"
 	"time"
@@ -241,11 +242,12 @@ func asymmetricEncryptStream(
 ) (encryptWriter io.WriteCloser, err error) {
 	config := &packet.Config{
 		DefaultCipher: packet.CipherAES256,
+		DefaultHash:   crypto.SHA256,
 		Time:          getTimeGenerator(),
 	}
 
 	if compress {
-		config.DefaultCompressionAlgo = constants.DefaultCompression
+		config.DefaultCompressionAlgo = packet.CompressionZIP
 		config.CompressionConfig = &packet.CompressionConfig{Level: constants.DefaultCompressionLevel}
 	}
 
